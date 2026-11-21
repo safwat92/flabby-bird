@@ -1,11 +1,12 @@
 import pygame
 
 class Bird(pygame.sprite.Sprite):
-    def __init__(self, game):
+    def __init__(self, screen, screen_h,ground_height):
         pygame.sprite.Sprite.__init__(self)
-        self.game = game
-        self.screen = game.screen
-        self.bird_pos = self.game.screen_h // 2 - 100 # 300
+        self.screen = screen
+        self.screen_h = screen_h
+        self.ground_height = ground_height
+        self.bird_pos = screen_h // 2 - 100 # 300
         self.bird_state = "break"
         self.velocity = -5
 
@@ -19,20 +20,21 @@ class Bird(pygame.sprite.Sprite):
         self.index = 0
         self.image = self.images[self.index]
         self.rect = self.image.get_rect(center=(80, self.bird_pos))
+        self.alive = True
 
-    def update(self):
+    def update(self):        
         self.velocity += 0.25
         if self.velocity > 8:
             self.velocity = 8
 
-        if self.rect.y < self.game.screen_h - self.game.ground_height:
+        if self.rect.y < self.screen_h - self.ground_height:
             self.rect.y += self.velocity
             if self.velocity >= 0:
                 self.bird_state = "falling"
         else:
-            self.rect.y = self.game.screen_h - self.game.ground_height
+            self.rect.y = self.screen_h - self.ground_height
             self.bird_state = "break"
-            self.game.game_state = "game_over"
+            self.alive = False
 
         self.counter += 1
 
@@ -51,3 +53,8 @@ class Bird(pygame.sprite.Sprite):
     def jump(self):
         self.velocity = -6
         self.bird_state = "rising"
+
+    def restart(self):
+        self.alive = True
+        self.velocity = -5
+        self.rect = self.image.get_rect(center=(80, self.bird_pos))
