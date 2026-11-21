@@ -21,13 +21,6 @@ class Bird(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(80, self.bird_pos))
 
     def update(self):
-        if self.game.game_state == "running":
-            is_pressed = pygame.mouse.get_pressed()[0]
-            if is_pressed == 1 and self.last_mouse_state == False:
-                self.velocity = -6
-                self.bird_state = "rising"
-            self.last_mouse_state = is_pressed
-
         self.velocity += 0.25
         if self.velocity > 8:
             self.velocity = 8
@@ -54,3 +47,7 @@ class Bird(pygame.sprite.Sprite):
             self.image = pygame.transform.rotate(self.images[self.index], 0)
         else:
             self.image = pygame.transform.rotate(self.images[self.index], 30)
+
+    def jump(self):
+        self.velocity = -6
+        self.bird_state = "rising"
